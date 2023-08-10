@@ -1,5 +1,5 @@
 import { defineCustomElement } from "vue";
-import WeatherWidget from "@/App.vue";
+import WeatherWidget from "@/WeatherWidget.ce.vue";
 
 const App = defineCustomElement(WeatherWidget);
 
