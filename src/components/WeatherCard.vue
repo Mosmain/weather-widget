@@ -50,9 +50,7 @@
           {{ weatherData.main.pressure }}hPa
         </p>
         <p>Humidity: {{ weatherData.main.humidity }}%</p>
-        <p>
-          Dew point: {{ roundToInteger(weatherData.main.temp_min) }}&#176;C
-        </p>
+        <p>Dew point: {{ roundToInteger(weatherData.main.temp_min) }}&#176;C</p>
         <p>Visibility: {{ weatherData.visibility / 1000 }}km</p>
       </div>
     </div>
