@@ -117,27 +117,8 @@
 import { defineComponent } from "vue";
 import weatherService from "@/api/weatherApi";
 import { WeatherData } from "@/api/weatherInterfaces";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import {
-  faBars,
-  faLocationArrow,
-  faArrowsToDot,
-  faGear,
-  faXmark,
-  faTrashCan,
-  faArrowTurnUp,
-} from "@fortawesome/free-solid-svg-icons";
-
-library.add(
-  faBars,
-  faLocationArrow,
-  faArrowsToDot,
-  faGear,
-  faTrashCan,
-  faXmark,
-  faArrowTurnUp
-);
+import { roundToInteger, roundToOneDecimal, getWeatherIconUrl } from "@/utils/utils";
+import { FontAwesomeIcon } from "@/utils/fontAwesome";
 
 export default defineComponent({
   name: "WeatherWidget",
@@ -154,6 +135,11 @@ export default defineComponent({
     };
   },
   methods: {
+    roundToInteger,
+    roundToOneDecimal,
+    getWeatherIconUrl(iconCode: string) {
+      return getWeatherIconUrl()(iconCode);
+    },
     fetchWeather() {
       if (this.newCity.trim() !== "") {
         weatherService
@@ -197,12 +183,6 @@ export default defineComponent({
     },
     showCitiesBlock() {
       this.isWeatherDisplayed = false;
-    },
-    roundToInteger(number: number) {
-      return Math.round(number);
-    },
-    roundToOneDecimal(number: number) {
-      return Math.round(number * 10) / 10;
     },
     addCity() {
       this.fetchWeather();
@@ -253,10 +233,6 @@ export default defineComponent({
   },
 
   computed: {
-    getWeatherIconUrl() {
-      return (iconCode: string) =>
-        `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
-    },
     getWindDescription() {
       return (speed: number): string => {
         const windDescriptions: { [key: number]: string } = {
