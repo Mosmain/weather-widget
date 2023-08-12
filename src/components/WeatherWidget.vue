@@ -1,129 +1,38 @@
 <template>
   <div>
-    <div v-if="isWeatherDisplayed" class="weather-card">
-      <div v-if="!weatherData">
-        <div class="weather-header">
-          <p class="city-info"></p>
-          <font-awesome-icon
-            class="close-btn"
-            icon="fa-solid fa-gear"
-            @click="showCitiesBlock"
-          />
-        </div>
-        <div>
-          <p>Oops.. Locations list is empty!</p>
-        </div>
-      </div>
-      <div v-else>
-        <div class="weather-header">
-          <p class="city-info">
-            {{ weatherData.name }}, {{ weatherData.sys.country }}
-          </p>
-          <font-awesome-icon
-            class="close-btn"
-            icon="fa-solid fa-gear"
-            @click="showCitiesBlock"
-          />
-        </div>
-        <div class="weather-image">
-          <img
-            :src="getWeatherIconUrl(weatherData.weather[0].icon)"
-            alt="Weather Icon"
-            class="weather-icon"
-          />
-          <p class="temperature">
-            {{ roundToInteger(weatherData.main.temp) }}&#176;C
-          </p>
-        </div>
-        <div class="additional-info">
-          <p>
-            Feels like {{ roundToInteger(weatherData.main.feels_like) }}&#176;C,
-            {{ weatherData.weather[0].description }},
-            {{ getWindDescription(weatherData.wind.speed) }}
-          </p>
-
-          <p>
-            <font-awesome-icon icon="fa-solid fa-location-arrow" />
-            {{ roundToOneDecimal(weatherData.wind.speed) }}m/s,
-            {{ getWindDirection(weatherData.wind.deg) }}
-          </p>
-          <p>
-            <font-awesome-icon icon="fa-solid fa-arrows-to-dot" />
-            {{ weatherData.main.pressure }}hPa
-          </p>
-
-          <p>Humidity: {{ weatherData.main.humidity }}%</p>
-          <p>
-            Dew point: {{ roundToInteger(weatherData.main.temp_min) }}&#176;C
-          </p>
-          <p>Visibility: {{ weatherData.visibility / 1000 }}km</p>
-        </div>
-      </div>
-    </div>
-    <div v-if="!isWeatherDisplayed" class="information">
-      <div class="information-header">
-        <p>Settings</p>
-        <font-awesome-icon
-          class="close-btn"
-          icon="fa-solid fa-xmark"
-          @click="showWeatherBlock()"
-        />
-      </div>
-      <ul>
-        <li
-          v-for="(city, index) in cities"
-          :key="city"
-          :draggable="true"
-          :class="{ dragging: activeDragIndex === index }"
-          @dragstart="startDragging(index)"
-          @dragover="handleDragOver(index)"
-          @dragend="endDragging"
-          class="city-item"
-        >
-          <div class="city-details">
-            <div class="burger-icon">
-              <font-awesome-icon icon="fa-solid fa-bars" />
-            </div>
-            <div @click="showWeather(city)" class="city-name">
-              <p>{{ city }}</p>
-            </div>
-            <button class="remove-button">
-              <font-awesome-icon
-                icon="fa-solid fa-trash-can"
-                @click="removeCity(city)"
-              />
-            </button>
-          </div>
-        </li>
-      </ul>
-      <div class="information-bottom">
-        <label for="add-loc">Add Location</label>
-        <form class="input-field" @submit.prevent="addCity">
-          <input
-            v-model="newCity"
-            placeholder="Enter Location"
-            name="add-loc"
-          />
-          <button type="submit">
-            <font-awesome-icon icon="fa-solid fa-arrow-turn-up" />
-          </button>
-        </form>
-      </div>
-    </div>
+    <weather-card
+      v-if="isWeatherDisplayed"
+      :weather-data="weatherData"
+      @settingsClick="showCitiesBlock"
+    />
+    <weather-settings
+      v-else
+      :cities="cities"
+      :newCity="newCity"
+      :activeDragIndex="activeDragIndex"
+      @showWeatherBlock="showWeatherBlock"
+      @cityDragStart="startDragging"
+      @cityDragOver="handleDragOver"
+      @cityDragEnd="endDragging"
+      @addCity="addCity"
+      @cityClick="showWeather"
+      @removeCity="removeCity"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import weatherService from "@/api/weatherApi";
+import WeatherCard from "@/components/WeatherCard.vue";
+import WeatherSettings from "@/components/WeatherSettings.vue";
 import { WeatherData } from "@/api/weatherInterfaces";
-import { roundToInteger, roundToOneDecimal, getWeatherIconUrl } from "@/utils/utils";
-import { FontAwesomeIcon } from "@/utils/fontAwesome";
+import weatherService from "@/api/weatherApi";
 
 export default defineComponent({
   name: "WeatherWidget",
   components: {
-    FontAwesomeIcon,
+    WeatherCard,
+    WeatherSettings,
   },
   data() {
     return {
@@ -135,11 +44,6 @@ export default defineComponent({
     };
   },
   methods: {
-    roundToInteger,
-    roundToOneDecimal,
-    getWeatherIconUrl(iconCode: string) {
-      return getWeatherIconUrl()(iconCode);
-    },
     fetchWeather() {
       if (this.newCity.trim() !== "") {
         weatherService
@@ -229,33 +133,6 @@ export default defineComponent({
     },
     endDragging() {
       this.activeDragIndex = -1;
-    },
-  },
-
-  computed: {
-    getWindDescription() {
-      return (speed: number): string => {
-        const windDescriptions: { [key: number]: string } = {
-          1: "Calm",
-          3: "Light breeze",
-          5: "Gentle breeze",
-          8: "Moderate breeze",
-          11: "Fresh breeze",
-        };
-
-        const maxSpeed: number =
-          Object.keys(windDescriptions)
-            .map(Number)
-            .find((key) => speed < key) || 11;
-        return windDescriptions[maxSpeed];
-      };
-    },
-    getWindDirection() {
-      return (deg: number): string => {
-        const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
-        const index = Math.floor((deg % 360) / 45);
-        return directions[(index + 8) % 8];
-      };
     },
   },
   mounted() {
