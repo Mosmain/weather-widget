@@ -1,15 +1,13 @@
 <template>
   <div class="weather-card">
-    <div v-if="!weatherData">
+    <div v-if="!weatherData" class="h-100">
       <div class="weather-header">
         <p class="city-info"></p>
-        <font-awesome-icon
-          class="close-btn"
-          icon="fa-solid fa-gear"
-          @click="settingsClick"
-        />
+        <div class="close-btn" @click="settingsClick">
+          <font-awesome-icon icon="fa-solid fa-gear" />
+        </div>
       </div>
-      <div>
+      <div class="error-message">
         <p>Oops.. Locations list is empty!</p>
       </div>
     </div>
@@ -18,11 +16,9 @@
         <p class="city-info">
           {{ weatherData.name }}, {{ weatherData.sys.country }}
         </p>
-        <font-awesome-icon
-          class="close-btn"
-          icon="fa-solid fa-gear"
-          @click="settingsClick"
-        />
+        <div class="close-btn" @click="settingsClick">
+          <font-awesome-icon icon="fa-solid fa-gear" />
+        </div>
       </div>
       <div class="weather-image">
         <img

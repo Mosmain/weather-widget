@@ -2,25 +2,25 @@
   <div class="information">
     <div class="information-header">
       <p>Settings</p>
-      <font-awesome-icon
-        class="close-btn"
-        icon="fa-solid fa-xmark"
-        @click="showWeatherBlock"
-      />
+      <div class="close-btn" @click="showWeatherBlock">
+        <font-awesome-icon icon="fa-solid fa-xmark" />
+      </div>
     </div>
     <ul>
       <li
         v-for="(city, index) in cities"
         :key="city"
-        :draggable="true"
         :class="{ dragging: activeDragIndex === index }"
-        @dragstart="startDragging(index)"
         @dragover="handleDragOver(index)"
         @dragend="endDragging"
         class="city-item"
       >
         <div class="city-details">
-          <div class="burger-icon">
+          <div
+            class="burger-icon"
+            :draggable="true"
+            @dragstart="startDragging(index)"
+          >
             <font-awesome-icon icon="fa-solid fa-bars" />
           </div>
           <div @click="showWeather(city)" class="city-name">
