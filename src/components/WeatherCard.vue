@@ -9,6 +9,7 @@
       </div>
       <div class="error-message">
         <p>Oops.. Locations list is empty!</p>
+        <button @click="getWeatherOnMyLocation">Get weather on my Location</button>
       </div>
     </div>
     <div v-else>
@@ -76,18 +77,21 @@ export default defineComponent({
   components: {
     FontAwesomeIcon,
   },
-  setup(props, { emit }) {
-    const settingsClick = () => {
-      emit("settingsClick");
-    };
-
+  methods: {
+    settingsClick() {
+      this.$emit("settingsClick");
+    },
+    getWeatherOnMyLocation() {
+      this.$emit("getWeatherOnMyLocation");
+    },
+  },
+  data() {
     return {
       roundToInteger,
       roundToOneDecimal,
       getWeatherIconUrl,
       getWindDescription,
       getWindDirection,
-      settingsClick,
     };
   },
 });

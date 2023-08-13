@@ -5,6 +5,7 @@
       :weather-data="weatherData"
       @addCity="addCity"
       @settingsClick="showCitiesBlock"
+      @getWeatherOnMyLocation="fetchCityByCoordinates"
     />
     <weather-settings
       v-else
@@ -50,7 +51,10 @@ export default defineComponent({
         weatherService
           .getWeatherByCity(this.newCity)
           .then((data) => {
-            this.cities.push(`${data.name}, ${data.sys.country}`);
+            const location = `${data.name}, ${data.sys.country}`;
+            // if (!this.cities.includes(location)) {
+            // }
+            this.cities.push(location);
             this.weatherData = data;
             this.newCity = "";
             this.showWeatherBlock();
@@ -76,9 +80,11 @@ export default defineComponent({
           if (city) {
             this.showWeatherBlock();
             if (!this.cities.includes(city)) {
+              console.log("city=", city);
               this.cities.push(city);
-              this.saveCitiesLocally();
+              this.saveCitiesLocally(city);
             }
+            console.log("this.cities.includes(city)");
             this.showWeather(city);
           }
         });
@@ -109,21 +115,29 @@ export default defineComponent({
       const cityIndex = this.cities.indexOf(city);
       if (cityIndex !== -1) {
         this.cities.splice(cityIndex, 1);
-        this.saveCitiesLocally();
+        this.deleteCitiesLocally();
       }
     },
-    saveCitiesLocally() {
-      const newCity = `${this.weatherData?.name}, ${this.weatherData?.sys.country} `;
+    deleteCitiesLocally() {
+      localStorage.setItem('userCities', JSON.stringify(this.cities));
+    },
+    saveCitiesLocally(newCity?: string) {
+      const existingCities = JSON.parse(
+        localStorage.getItem("userCities") || "[]"
+      );
 
-      if (newCity) {
-        const existingCities = JSON.parse(
-          localStorage.getItem("userCities") || "[]"
-        );
-        const updatedCities = Array.isArray(existingCities)
-          ? existingCities.concat(newCity)
-          : [existingCities, newCity];
-        localStorage.setItem("userCities", JSON.stringify(updatedCities));
-      }
+      const updatedCities = Array.isArray(existingCities)
+        ? existingCities.concat(
+            newCity ||
+              `${this.weatherData?.name}, ${this.weatherData?.sys.country}`
+          )
+        : [
+            existingCities,
+            newCity ||
+              `${this.weatherData?.name}, ${this.weatherData?.sys.country}`,
+          ];
+
+      localStorage.setItem("userCities", JSON.stringify(updatedCities));
     },
 
     restoreCitiesLocally() {
@@ -147,7 +161,7 @@ export default defineComponent({
       this.cities.splice(index, 0, draggedCity);
 
       this.activeDragIndex = index;
-      this.saveCitiesLocally();
+      this.deleteCitiesLocally();
     },
     endDragging() {
       this.activeDragIndex = -1;

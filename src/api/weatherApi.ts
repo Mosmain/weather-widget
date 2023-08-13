@@ -29,12 +29,11 @@ const weatherService = {
           lat: latitude,
           lon: longitude,
           units: "metric",
-          lang: "ru",
           appid: API_KEY,
         },
       });
 
-      const city = response.data.name;
+      const city = `${response.data.name}, ${response.data.sys.country}`;
       return city || null;
     } catch (error) {
       console.error("Failed to fetch city by coordinates", error);
