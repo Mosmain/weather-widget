@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, PropType } from "vue";
 import { FontAwesomeIcon } from "@/utils/fontAwesome";
 
 export default defineComponent({
@@ -74,50 +74,36 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props, { emit }) {
-    const newCityInput = ref(props.newCity);
-
-    const showWeatherBlock = () => {
-      emit("showWeatherBlock");
-    };
-
-    const startDragging = (index: number) => {
-      emit("cityDragStart", index);
-    };
-
-    const handleDragOver = (index: number) => {
-      emit("cityDragOver", index);
-    };
-
-    const endDragging = () => {
-      emit("cityDragEnd");
-    };
-
-    const addCity = () => {
-      if (newCityInput.value.trim() !== "") {
-        emit("addCity", newCityInput.value);
-        newCityInput.value = "";
-      }
-    };
-
-    const showWeather = (city: string) => {
-      emit("cityClick", city);
-    };
-
-    const removeCity = (city: string) => {
-      emit("removeCity", city);
-    };
-
+  data() {
     return {
-      newCityInput,
-      showWeatherBlock,
-      startDragging,
-      handleDragOver,
-      endDragging,
-      addCity,
-      showWeather,
-      removeCity,
+      newCityInput: this.newCity,
     };
+  },
+  methods: {
+    showWeatherBlock() {
+      this.$emit("showWeatherBlock");
+    },
+    startDragging(index: number) {
+      this.$emit("cityDragStart", index);
+    },
+    handleDragOver(index: number) {
+      this.$emit("cityDragOver", index);
+    },
+    endDragging() {
+      this.$emit("cityDragEnd");
+    },
+    addCity() {
+      if (this.newCityInput.trim() !== "") {
+        this.$emit("addCity", this.newCityInput);
+        this.newCityInput = "";
+      }
+    },
+    showWeather(city: string) {
+      this.$emit("cityClick", city);
+    },
+    removeCity(city: string) {
+      this.$emit("removeCity", city);
+    },
   },
 });
 </script>

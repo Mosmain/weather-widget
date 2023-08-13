@@ -3,6 +3,7 @@
     <weather-card
       v-if="isWeatherDisplayed"
       :weather-data="weatherData"
+      @addCity="addCity"
       @settingsClick="showCitiesBlock"
     />
     <weather-settings
@@ -49,7 +50,7 @@ export default defineComponent({
         weatherService
           .getWeatherByCity(this.newCity)
           .then((data) => {
-            this.cities.push(this.newCity);
+            this.cities.push(`${data.name}, ${data.sys.country}`);
             this.weatherData = data;
             this.newCity = "";
             this.showWeatherBlock();
@@ -57,6 +58,7 @@ export default defineComponent({
           })
           .catch((error) => {
             console.error(error);
+            alert("Location not found!");
           });
       }
     },
@@ -88,7 +90,8 @@ export default defineComponent({
     showCitiesBlock() {
       this.isWeatherDisplayed = false;
     },
-    addCity() {
+    addCity(city: string) {
+      this.newCity = city;
       this.fetchWeather();
     },
     showWeather(city: string) {
@@ -110,14 +113,29 @@ export default defineComponent({
       }
     },
     saveCitiesLocally() {
-      localStorage.setItem("userCities", JSON.stringify(this.cities));
+      const newCity = `${this.weatherData?.name}, ${this.weatherData?.sys.country} `;
+
+      if (newCity) {
+        const existingCities = JSON.parse(
+          localStorage.getItem("userCities") || "[]"
+        );
+        const updatedCities = Array.isArray(existingCities)
+          ? existingCities.concat(newCity)
+          : [existingCities, newCity];
+        localStorage.setItem("userCities", JSON.stringify(updatedCities));
+      }
     },
+
     restoreCitiesLocally() {
       const savedCities = localStorage.getItem("userCities");
       if (savedCities) {
-        this.cities = JSON.parse(savedCities);
+        const parsedCities = JSON.parse(savedCities);
+        Array.isArray(parsedCities)
+          ? this.cities.push(...parsedCities)
+          : this.cities.push(parsedCities);
       }
     },
+
     startDragging(index: number) {
       this.activeDragIndex = index;
     },
