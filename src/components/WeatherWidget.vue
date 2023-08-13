@@ -1,7 +1,7 @@
 <template>
   <div>
     <weather-card
-      v-if="isWeatherDisplayed"
+      v-if="isWeatherDisplayed && weatherData"
       :weather-data="weatherData"
       @addCity="addCity"
       @settingsClick="showCitiesBlock"
@@ -80,11 +80,9 @@ export default defineComponent({
           if (city) {
             this.showWeatherBlock();
             if (!this.cities.includes(city)) {
-              console.log("city=", city);
               this.cities.push(city);
               this.saveCitiesLocally(city);
             }
-            console.log("this.cities.includes(city)");
             this.showWeather(city);
           }
         });
@@ -119,7 +117,7 @@ export default defineComponent({
       }
     },
     deleteCitiesLocally() {
-      localStorage.setItem('userCities', JSON.stringify(this.cities));
+      localStorage.setItem("userCities", JSON.stringify(this.cities));
     },
     saveCitiesLocally(newCity?: string) {
       const existingCities = JSON.parse(
