@@ -1,5 +1,18 @@
 # weather-widget
 
+## How to use
+
+Put `<script>` at the beginning
+
+```
+<script defer="defer" src="https://mosmain.github.io/weather-widget/js/app.js"></script>
+```
+
+After
+```
+<weather-widget />
+```
+
 ## Project setup
 ```
 npm install
