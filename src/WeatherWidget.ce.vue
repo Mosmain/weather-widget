@@ -4,15 +4,10 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import WeatherWidget from "@/components/WeatherWidget.vue";
-
-export default defineComponent({
-  components: { WeatherWidget },
-});
+<script setup lang="ts">
+  import WeatherWidget from '@/components/WeatherWidget.vue'
 </script>
 
 <style lang="scss">
-@import "./assets/styles.scss";
+  @use '@/assets/styles/widget.scss';
 </style>
