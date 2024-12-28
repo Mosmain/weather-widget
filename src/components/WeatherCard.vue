@@ -189,10 +189,6 @@
     return `${hours}:${minutes}`
   }
 
-  const test = (time: number) => {
-    return new Date(time)
-  }
-
   const getTimeWithTimezone = (timezoneOffsetInSeconds: number) => {
     const now = new Date().getTime()
 
