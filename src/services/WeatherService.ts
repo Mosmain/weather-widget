@@ -1,6 +1,6 @@
 import { OpenWeatherResponse } from '@/types/OpenWeather'
 
-const API_KEY = 'b1b15e88fa797225412429c1c50c122a1r'
+const API_KEY = '3671171dabbb6227d5916ff1f165b28b'
 const BASE_URL = `https://api.openweathermap.org/data/2.5/weather?appid=${API_KEY}`
 
 export async function fetchWeatherByCoords(

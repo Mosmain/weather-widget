@@ -4,6 +4,7 @@
       <SettingsMenu
         v-if="showSettings"
         :cities="cities"
+        :show-settings="showSettings"
         @add-city="addCity"
         @update-cities="updateCities"
         @close-settings="toggleSettings"
@@ -12,6 +13,7 @@
         v-for="city in cities"
         :key="city.id"
         :city="city"
+        :show-settings="showSettings"
         @open-settings="toggleSettings"
       />
     </div>

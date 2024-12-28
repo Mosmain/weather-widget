@@ -9,6 +9,7 @@ export interface OpenWeatherResponse {
   dt: number
   sys: Sys
   timezone: number
+  visibility: number
   id: number
   name: string
   cod: number
@@ -62,12 +63,23 @@ export interface Sys {
 export interface WeatherCardModel {
   id: number
   name: string
+  country: string
   icon: string
   temperature: number
   description: string
+  main: string
   feels_like: number
   temp_min: number
   temp_max: number
   pressure: number
   humidity: number
+  wind_speed: number
+  wind_deg: number
+  wind_direction: string
+  visibility_description: string
+  visibility: number
+  sunrise: number
+  sunset: number
+  timezone: number
+  dt: number
 }
