@@ -109,6 +109,7 @@
           </div>
           <div class="weather-info__body__humidity-visibility">
             <div class="current-humidity">
+              {{ city.humidity }}%
               <i>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                   <path
@@ -119,9 +120,10 @@
                   />
                 </svg>
               </i>
-              {{ city.humidity }}%
+              {{ city.humidity_description }}
             </div>
             <div class="current-visibility">
+              {{ city.visibility }}м
               <i>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -149,14 +151,30 @@
               {{ city.visibility_description }}
             </div>
           </div>
-          timezone {{ city.timezone }} —
-          {{ getTimeWithTimezone(city.timezone) }}
-          <br />
-          {{ city.sunrise }} —
-          {{ timestampToUTCDate(city.sunrise, city.timezone) }}
-          <br />
-          {{ city.sunset }} —
-          {{ timestampToUTCDate(city.sunset, city.timezone) }}
+          <div class="weather-info__body__sunrise-sunset">
+            <div class="current-sunrise">
+              {{ timestampToUTCDate(city.sunrise, city.timezone) }}
+              <i>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path
+                    d="M7 15a5 5 0 0 1 10 0 1 1 0 0 1-2 0 3 3 0 0 0-6 0 1 1 0 0 1-2 0Zm11-4.6.7-.7a1 1 0 0 0-1.4-1.4l-.7.7a1 1 0 1 0 1.4 1.4Zm2 5.6h1a1 1 0 0 0 0-2h-1a1 1 0 0 0 0 2ZM4 14H3a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2Zm1.3-4.3.7.7A1 1 0 1 0 7.4 9l-.7-.7a1 1 0 0 0-1.4 1.4ZM4 18a1 1 0 0 0 1 1h14a1 1 0 0 0 0-2H5a1 1 0 0 0-1 1Zm4 3a1 1 0 0 0 0 2h8a1 1 0 0 0 0-2Zm4-12a1 1 0 0 0 1-1V4.4l1.3 1.3a1 1 0 0 0 1.4-1.4l-3-3a1 1 0 0 0-1.4 0l-3 3a1 1 0 0 0 1.4 1.4L11 4.4V8a1 1 0 0 0 1 1Z"
+                  />
+                </svg>
+              </i>
+              Восход
+            </div>
+            <div class="current-sunset">
+              {{ timestampToUTCDate(city.sunset, city.timezone) }}
+              <i>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path
+                    d="M7 15a5 5 0 0 1 10 0 1 1 0 0 1-2 0 3 3 0 0 0-6 0 1 1 0 0 1-2 0Zm10.3-6.7-.7.7a1 1 0 1 0 1.4 1.4l.7-.7a1 1 0 0 0-1.4-1.4ZM22 15a1 1 0 0 0-1-1h-1a1 1 0 0 0 0 2h1a1 1 0 0 0 1-1ZM4 14H3a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2Zm2.7-5.7a1 1 0 0 0-1.4 1.4l.7.7A1 1 0 1 0 7.4 9ZM4 18a1 1 0 0 0 1 1h14a1 1 0 0 0 0-2H5a1 1 0 0 0-1 1Zm13 4a1 1 0 0 0-1-1H8a1 1 0 0 0 0 2h8a1 1 0 0 0 1-1ZM12 1a1 1 0 0 0-1 1v3.6L9.7 4.3a1 1 0 0 0-1.4 1.4l3 3a1 1 0 0 0 1.4 0l3-3a1 1 0 1 0-1.4-1.4L13 5.6V2a1 1 0 0 0-1-1Z"
+                  />
+                </svg>
+              </i>
+              Закат
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -184,7 +202,7 @@
   const timestampToUTCDate = (time: number, timezone: number) => {
     const date = new Date((time + timezone) * 1000)
 
-    const hours = date.getUTCHours()
+    const hours = date.getUTCHours().toString().padStart(2, '0')
     const minutes = date.getUTCMinutes().toString().padStart(2, '0')
     return `${hours}:${minutes}`
   }

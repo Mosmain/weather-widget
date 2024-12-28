@@ -73,6 +73,7 @@ export interface WeatherCardModel {
   temp_max: number
   pressure: number
   humidity: number
+  humidity_description: string
   wind_speed: number
   wind_deg: number
   wind_direction: string

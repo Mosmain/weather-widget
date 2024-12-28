@@ -17,7 +17,9 @@
   padding: 1rem;
   text-align: center;
   margin: 1rem 0;
-  background-color: #b3bbff;
+  background-color: #be95c4;
+  color: #231942;
+  fill: #231942;
 
   &:first-child {
     margin-top: 0;
@@ -60,12 +62,12 @@
       }
 
       &.settigns {
-        fill: #acacac;
+        fill: #231942;
         transition: ease-in-out 0.15s;
       }
 
       &.close {
-        fill: #ff5353;
+        fill: #231942;
         transition: ease-in-out 0.15s;
       }
 
@@ -77,6 +79,10 @@
     }
   }
 
+  .settings-menu {
+    margin-bottom: 0.5rem;
+  }
+
   &__body {
     display: flex;
     flex-direction: column;
@@ -86,17 +92,17 @@
     .city-list {
       box-sizing: border-box;
       width: 100%;
-      margin-top: 0.5rem;
 
       &__item {
-        background-color: #ebebeb;
+        text-align: start;
+        background-color: #e0b1cb;
         cursor: move;
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin: 0.25rem 0;
         padding: 0.75rem;
-        box-shadow: inset 0 0 0 1px #ccc;
+        box-shadow: inset 0 0 0 1px #231942;
         border-radius: 0.25rem;
 
         &:first-child {
@@ -122,11 +128,11 @@
       }
 
       &__chosen {
-        box-shadow: inset 0 0 0 2px #422951;
+        box-shadow: inset 0 0 0 2px #231942;
       }
       &__ghost {
         opacity: 0.5;
-        background-color: #bbb;
+        background-color: #e0b1cb;
       }
     }
 
@@ -145,6 +151,7 @@
       display: flex;
       flex-direction: column;
       font-size: 0.875rem;
+      flex-grow: 1;
 
       &__header {
         display: flex;
@@ -192,6 +199,9 @@
       &__body {
         display: flex;
         flex-wrap: wrap;
+        flex-grow: 1;
+        align-items: center;
+
         i {
           margin: 0 0.25rem;
           vertical-align: middle;
@@ -201,17 +211,28 @@
         }
 
         &__pressure-wind,
-        &__humidity-visibility {
+        &__humidity-visibility,
+        &__sunrise-sunset {
           display: flex;
-          justify-content: space-between;
+          justify-content: space-around;
           width: 100%;
 
           .current-pressure,
           .current-wind,
           .current-humidity,
-          .current-visibility {
+          .current-visibility,
+          .current-sunrise,
+          .current-sunset {
             display: flex;
             align-items: center;
+            width: 50%;
+          }
+
+          .current-humidity,
+          .current-visibility,
+          .current-sunrise,
+          .current-sunset {
+            flex-direction: column;
           }
 
           .current-wind {
@@ -231,8 +252,10 @@
 
     input {
       width: 100%;
-      height: 1.25rem;
-      margin-right: 0.75rem;
+      height: 100%;
+      padding: 0 5px;
+      border-radius: 4px;
+      border: none;
     }
 
     .input-form {
@@ -256,6 +279,7 @@
       align-items: center;
       border-radius: 4px;
       margin-left: 1rem;
+      background-color: #e0b1cb;
 
       svg {
         height: 16px;

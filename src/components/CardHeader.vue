@@ -1,5 +1,5 @@
 <template>
-  <div class="weather-card__header">
+  <div class="weather-card__header" :class="{ 'settings-menu': isOpen }">
     <h3><slot /></h3>
     <button :class="showCloseIcon" @click="$emit('settings-switcher')">
       <svg

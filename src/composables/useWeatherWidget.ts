@@ -57,6 +57,23 @@ function getVisibilityDescription(visibility: number): string {
   return 'Превосходная видимость'
 }
 
+function getHumidityDescription(humidity: number): string {
+  const ranges = [
+    { max: 30, description: 'Низкая влажность' },
+    { max: 60, description: 'Умеренная влажность' },
+    { max: 80, description: 'Высокая влажность' },
+    { max: 100, description: 'Очень высокая влажность' },
+  ]
+
+  for (const range of ranges) {
+    if (humidity <= range.max) {
+      return range.description
+    }
+  }
+
+  return 'Экстремальная влажность'
+}
+
 export function useWeatherWidget() {
   const cities = ref<Array<WeatherCardModel>>([])
   const showSettings = ref(false)
@@ -85,6 +102,9 @@ export function useWeatherWidget() {
               temp_max: Math.round(weatherData.main.temp_max),
               pressure: hPaToMmHg(weatherData.main.pressure),
               humidity: weatherData.main.humidity,
+              humidity_description: getHumidityDescription(
+                weatherData.main.humidity,
+              ),
               wind_speed: weatherData.wind.speed.toFixed(1),
               wind_deg: wind.angle,
               wind_direction: wind.direction,
@@ -126,6 +146,9 @@ export function useWeatherWidget() {
           temp_max: Math.round(weatherData.main.temp_max),
           pressure: hPaToMmHg(weatherData.main.pressure),
           humidity: weatherData.main.humidity,
+          humidity_description: getHumidityDescription(
+            weatherData.main.humidity,
+          ),
           wind_speed: Number(weatherData.wind.speed.toFixed(1)),
           wind_deg: wind.angle,
           wind_direction: wind.direction,
@@ -160,6 +183,7 @@ export function useWeatherWidget() {
         temp_max: Math.round(weatherData.main.temp_max),
         pressure: hPaToMmHg(weatherData.main.pressure),
         humidity: weatherData.main.humidity,
+        humidity_description: getHumidityDescription(weatherData.main.humidity),
         wind_speed: Number(weatherData.wind.speed.toFixed(1)),
         wind_deg: wind.angle,
         wind_direction: wind.direction,
