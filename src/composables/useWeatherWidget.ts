@@ -12,9 +12,13 @@ function capitalizeFirstWord(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1)
 }
 
-function getWindDirection(degrees: number): {
+function getWindDirection(
+  degrees: number,
+  dirtySpeed: number,
+): {
   direction: string
   angle: number
+  speed: string
 } {
   if (degrees < 0 || degrees > 360) {
     throw new Error('Введите число от 0 до 360.')
@@ -25,8 +29,9 @@ function getWindDirection(degrees: number): {
   const index = Math.round(degrees / 45) % 8 // Разделение на сектора по 45°
   const direction = directions[index]
   const angle = index * 45
+  const speed = dirtySpeed.toFixed(1)
 
-  return { direction, angle }
+  return { direction, angle, speed }
 }
 
 function hPaToMmHg(hPa: number): number {
@@ -86,7 +91,10 @@ export function useWeatherWidget() {
         savedCities.map(async (city: WeatherCardModel) => {
           try {
             const weatherData = await fetchWeatherByCityName(city.name)
-            const wind = getWindDirection(weatherData.wind.deg)
+            const wind = getWindDirection(
+              weatherData.wind.deg,
+              weatherData.wind.speed,
+            )
             return {
               id: city.id,
               name: weatherData.name,
@@ -105,7 +113,7 @@ export function useWeatherWidget() {
               humidity_description: getHumidityDescription(
                 weatherData.main.humidity,
               ),
-              wind_speed: weatherData.wind.speed.toFixed(1),
+              wind_speed: wind.speed,
               wind_deg: wind.angle,
               wind_direction: wind.direction,
               visibility_description: getVisibilityDescription(
@@ -131,7 +139,10 @@ export function useWeatherWidget() {
         position.latitude,
         position.longitude,
       )
-      const wind = getWindDirection(weatherData.wind.deg)
+      const wind = getWindDirection(
+        weatherData.wind.deg,
+        weatherData.wind.speed,
+      )
       cities.value = [
         {
           id: Date.now(),
@@ -149,7 +160,7 @@ export function useWeatherWidget() {
           humidity_description: getHumidityDescription(
             weatherData.main.humidity,
           ),
-          wind_speed: Number(weatherData.wind.speed.toFixed(1)),
+          wind_speed: wind.speed,
           wind_deg: wind.angle,
           wind_direction: wind.direction,
           visibility_description: getVisibilityDescription(
@@ -169,7 +180,10 @@ export function useWeatherWidget() {
   async function addCity(cityName: string) {
     try {
       const weatherData = await fetchWeatherByCityName(cityName)
-      const wind = getWindDirection(weatherData.wind.deg)
+      const wind = getWindDirection(
+        weatherData.wind.deg,
+        weatherData.wind.speed,
+      )
       const newCity = {
         id: Date.now(),
         name: weatherData.name,
@@ -184,7 +198,7 @@ export function useWeatherWidget() {
         pressure: hPaToMmHg(weatherData.main.pressure),
         humidity: weatherData.main.humidity,
         humidity_description: getHumidityDescription(weatherData.main.humidity),
-        wind_speed: Number(weatherData.wind.speed.toFixed(1)),
+        wind_speed: wind.speed,
         wind_deg: wind.angle,
         wind_direction: wind.direction,
         visibility_description: getVisibilityDescription(
